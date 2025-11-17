@@ -1,42 +1,47 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import './i18n/config';
+
+// Eager load critical pages for better UX
 import LandingPage from './pages/LandingPage';
-import MarketplacePage from './pages/MarketplacePage';
-import CreateListingPage from './pages/CreateListingPage';
-import ProductDetailPage from './pages/ProductDetailPage';
-import CheckoutPage from './pages/CheckoutPage';
-import DashboardPage from './pages/DashboardPage';
-import GuildsPage from './pages/GuildsPage';
-import CreateGuildPage from './pages/CreateGuildPage';
-import GuildDetailPage from './pages/GuildDetailPage';
-import ProjectsPage from './pages/ProjectsPage';
-import CreateProjectPage from './pages/CreateProjectPage';
-import ProjectDetailPage from './pages/ProjectDetailPage';
-import ProjectPaymentPage from './pages/ProjectPaymentPage';
-import PaymentSuccessPage from './pages/PaymentSuccessPage';
-import EscrowPage from './pages/EscrowPage';
-import SecureCheckoutPage from './pages/SecureCheckoutPage';
-import AdminDashboardPage from './pages/AdminDashboardPage';
-import AdminOverviewPage from './pages/AdminOverviewPage';
-import AdminTransactionsPage from './pages/AdminTransactionsPage';
-import AdminGuildsPage from './pages/AdminGuildsPage';
-import AdminAIAnalyticsPage from './pages/AdminAIAnalyticsPage';
-import AdminSettingsPage from './pages/AdminSettingsPage';
-import AdminLoginPage from './pages/AdminLoginPage';
-import MessagesPage from './pages/MessagesPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
-import AboutPage from './pages/AboutPage';
-import SettingsPage from './pages/SettingsPage';
-import UserProfilePage from './pages/UserProfilePage';
-import HelpPage from './pages/HelpPage';
-import SelectPlanPage from './pages/SelectPlanPage';
-import PlanSuccessPage from './pages/PlanSuccessPage';
-import CartPage from './pages/CartPage';
-import WalletPage from './pages/WalletPage';
-import AIChatInterface from './components/ai/AIChatInterface';
+
+// Lazy load all other pages to reduce initial bundle size
+const MarketplacePage = lazy(() => import('./pages/MarketplacePage'));
+const CreateListingPage = lazy(() => import('./pages/CreateListingPage'));
+const ProductDetailPage = lazy(() => import('./pages/ProductDetailPage'));
+const CheckoutPage = lazy(() => import('./pages/CheckoutPage'));
+const DashboardPage = lazy(() => import('./pages/DashboardPage'));
+const GuildsPage = lazy(() => import('./pages/GuildsPage'));
+const CreateGuildPage = lazy(() => import('./pages/CreateGuildPage'));
+const GuildDetailPage = lazy(() => import('./pages/GuildDetailPage'));
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage'));
+const CreateProjectPage = lazy(() => import('./pages/CreateProjectPage'));
+const ProjectDetailPage = lazy(() => import('./pages/ProjectDetailPage'));
+const ProjectPaymentPage = lazy(() => import('./pages/ProjectPaymentPage'));
+const PaymentSuccessPage = lazy(() => import('./pages/PaymentSuccessPage'));
+const EscrowPage = lazy(() => import('./pages/EscrowPage'));
+const SecureCheckoutPage = lazy(() => import('./pages/SecureCheckoutPage'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
+const AdminOverviewPage = lazy(() => import('./pages/AdminOverviewPage'));
+const AdminTransactionsPage = lazy(() => import('./pages/AdminTransactionsPage'));
+const AdminGuildsPage = lazy(() => import('./pages/AdminGuildsPage'));
+const AdminAIAnalyticsPage = lazy(() => import('./pages/AdminAIAnalyticsPage'));
+const AdminSettingsPage = lazy(() => import('./pages/AdminSettingsPage'));
+const AdminLoginPage = lazy(() => import('./pages/AdminLoginPage'));
+const MessagesPage = lazy(() => import('./pages/MessagesPage'));
+const AboutPage = lazy(() => import('./pages/AboutPage'));
+const SettingsPage = lazy(() => import('./pages/SettingsPage'));
+const UserProfilePage = lazy(() => import('./pages/UserProfilePage'));
+const HelpPage = lazy(() => import('./pages/HelpPage'));
+const SelectPlanPage = lazy(() => import('./pages/SelectPlanPage'));
+const PlanSuccessPage = lazy(() => import('./pages/PlanSuccessPage'));
+const CartPage = lazy(() => import('./pages/CartPage'));
+const WalletPage = lazy(() => import('./pages/WalletPage'));
+const AIChatInterface = lazy(() => import('./components/ai/AIChatInterface'));
+
 import AdminAuthGuard from './components/auth/AdminAuthGuard';
 import AuthGuard from './components/auth/AuthGuard';
 import { AIChatContext } from './context/AIChatContext';
@@ -45,6 +50,33 @@ import { NotificationProvider } from './contexts/NotificationContext';
 import { CartProvider } from './context/CartContext';
 import { globalStyles } from './styles/globalStyles';
 import { startTokenManager, stopTokenManager } from './utils/tokenManager';
+import { startKeepAlive, stopKeepAlive } from './utils/keepAlive';
+
+// Loading component
+const PageLoader = () => (
+  <div style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '100vh',
+    backgroundColor: 'var(--bg-primary)'
+  }}>
+    <div style={{
+      width: '40px',
+      height: '40px',
+      border: '4px solid var(--border-color)',
+      borderTop: '4px solid var(--primary-color)',
+      borderRadius: '50%',
+      animation: 'spin 1s linear infinite'
+    }} />
+    <style>{`
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    `}</style>
+  </div>
+);
 
 function App() {
   globalStyles();
@@ -85,17 +117,28 @@ function App() {
     };
   }, []);
 
+  // Start keep-alive service to prevent Render backend from spinning down
+  useEffect(() => {
+    startKeepAlive();
+
+    // Cleanup on unmount
+    return () => {
+      stopKeepAlive();
+    };
+  }, []);
+
   return (
     <CartProvider>
       <AIChatContext.Provider value={{ isAIChatOpen, setIsAIChatOpen }}>
         <Router>
-        <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/about" element={<AboutPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route path="/select-plan" element={<SelectPlanPage />} />
-          <Route path="/plan-success" element={<PlanSuccessPage />} />
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+              <Route path="/select-plan" element={<SelectPlanPage />} />
+              <Route path="/plan-success" element={<PlanSuccessPage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
           <Route path="/marketplace/create" element={<CreateListingPage />} />
           <Route path="/marketplace/product/:id" element={<ProductDetailPage />} />
@@ -129,11 +172,12 @@ function App() {
           <Route path="/admin/ai-analytics" element={<AdminAuthGuard><NotificationProvider><AdminProvider><AdminAIAnalyticsPage /></AdminProvider></NotificationProvider></AdminAuthGuard>} />
           <Route path="/admin/users" element={<AdminAuthGuard><NotificationProvider><AdminProvider><AdminDashboardPage /></AdminProvider></NotificationProvider></AdminAuthGuard>} />
           <Route path="/admin/settings" element={<AdminAuthGuard><NotificationProvider><AdminProvider><AdminSettingsPage /></AdminProvider></NotificationProvider></AdminAuthGuard>} />
-        </Routes>
+            </Routes>
 
-        {/* AI chat interface (when clicking sparkles icon in header) */}
-        <AIChatInterface isOpen={isAIChatOpen} onToggle={setIsAIChatOpen} />
-      </Router>
+            {/* AI chat interface (when clicking sparkles icon in header) */}
+            <AIChatInterface isOpen={isAIChatOpen} onToggle={setIsAIChatOpen} />
+          </Suspense>
+        </Router>
     </AIChatContext.Provider>
     </CartProvider>
   );

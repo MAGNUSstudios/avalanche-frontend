@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { styled } from '../../stitches.config';
-import { Bell, Sparkles, Moon, Sun, Shield, ShoppingCart, Crown, Zap, X, LayoutDashboard, Users } from 'lucide-react';
+import { Bell, Sparkles, Moon, Sun, Shield, ShoppingCart, Crown, Zap, X, LayoutDashboard, Users, Menu } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 import { AIChatContext } from '../../context/AIChatContext';
 import { useCart } from '../../context/CartContext';
@@ -373,6 +373,103 @@ const ActionButton = styled('button', {
   },
 });
 
+const MobileMenuButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '40px',
+  height: '40px',
+  borderRadius: '$base',
+  border: 'none',
+  backgroundColor: 'transparent',
+  color: 'var(--text-primary)',
+  cursor: 'pointer',
+  transition: 'background-color 0.2s',
+  '&:hover': {
+    backgroundColor: 'var(--bg-tertiary)',
+  },
+  '@md': {
+    display: 'none',
+  },
+});
+
+const MobileMenuOverlay = styled('div', {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  zIndex: 100,
+  '@md': {
+    display: 'none',
+  },
+});
+
+const MobileMenuDrawer = styled('div', {
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  width: '280px',
+  maxWidth: '80vw',
+  backgroundColor: 'var(--card-bg)',
+  boxShadow: '-4px 0 12px rgba(0, 0, 0, 0.1)',
+  zIndex: 101,
+  display: 'flex',
+  flexDirection: 'column',
+  animation: 'slideInRight 0.3s ease-out',
+  '@keyframes slideInRight': {
+    from: {
+      transform: 'translateX(100%)',
+    },
+    to: {
+      transform: 'translateX(0)',
+    },
+  },
+});
+
+const MobileMenuHeader = styled('div', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: '$4',
+  borderBottom: '1px solid var(--border-color)',
+});
+
+const MobileMenuTitle = styled('div', {
+  fontSize: '$lg',
+  fontWeight: '$semibold',
+  color: 'var(--text-primary)',
+});
+
+const MobileMenuContent = styled('div', {
+  flex: 1,
+  overflowY: 'auto',
+  padding: '$4',
+});
+
+const MobileNavLink = styled(Link, {
+  display: 'block',
+  padding: '$3',
+  fontSize: '$base',
+  fontWeight: '$medium',
+  color: 'var(--text-primary)',
+  textDecoration: 'none',
+  borderRadius: '$base',
+  transition: 'background-color 0.2s',
+  '&:hover': {
+    backgroundColor: 'var(--bg-tertiary)',
+  },
+  marginBottom: '$2',
+});
+
+const MobileMenuDivider = styled('div', {
+  height: '1px',
+  backgroundColor: 'var(--border-color)',
+  margin: '$4 0',
+});
+
 const AvalancheIcon = () => (
   <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
     <path d="M12 2L2 19h20L12 2zm0 4l7 13H5l7-13z" />
@@ -397,6 +494,7 @@ const Header: React.FC<HeaderProps> = ({
   const { itemCount } = useCart();
   const [user, setUser] = useState<{ username?: string; first_name?: string; last_name?: string; avatar_url?: string; plan?: string; role?: string } | null>(null);
   const [showPlanModal, setShowPlanModal] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -526,12 +624,18 @@ const Header: React.FC<HeaderProps> = ({
       </Nav>
 
       <Actions>
+        {/* Mobile Menu Button */}
+        <MobileMenuButton onClick={() => setShowMobileMenu(true)} aria-label="Open menu">
+          <Menu size={24} />
+        </MobileMenuButton>
+
         {showCreateButton && (
-          <AuthButton 
-            variant="primary" 
-            as={Link} 
+          <AuthButton
+            variant="primary"
+            as={Link}
             to={createButtonHref}
             onClick={handleCreateClick}
+            style={{ display: 'none', '@media (min-width: 768px)': { display: 'inline-flex' } }}
           >
             {createButtonText}
           </AuthButton>
@@ -609,6 +713,102 @@ const Header: React.FC<HeaderProps> = ({
           {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
         </IconButton>
       </Actions>
+
+      {/* Mobile Menu Drawer */}
+      {showMobileMenu && (
+        <>
+          <MobileMenuOverlay onClick={() => setShowMobileMenu(false)} />
+          <MobileMenuDrawer>
+            <MobileMenuHeader>
+              <MobileMenuTitle>Menu</MobileMenuTitle>
+              <CloseButton onClick={() => setShowMobileMenu(false)}>
+                <X size={18} />
+              </CloseButton>
+            </MobileMenuHeader>
+            <MobileMenuContent>
+              {/* Navigation Links */}
+              <MobileNavLink to="/marketplace" onClick={() => setShowMobileMenu(false)}>
+                Marketplace
+              </MobileNavLink>
+              <MobileNavLink to="/guilds" onClick={() => setShowMobileMenu(false)}>
+                Guilds
+              </MobileNavLink>
+              <MobileNavLink to="/projects" onClick={() => setShowMobileMenu(false)}>
+                Projects
+              </MobileNavLink>
+              <MobileNavLink to="/about" onClick={() => setShowMobileMenu(false)}>
+                About
+              </MobileNavLink>
+
+              {isAuthenticated && user && (
+                <>
+                  <MobileMenuDivider />
+                  <MobileNavLink to="/dashboard" onClick={() => setShowMobileMenu(false)}>
+                    Dashboard
+                  </MobileNavLink>
+                  <MobileNavLink to="/settings" onClick={() => setShowMobileMenu(false)}>
+                    Settings
+                  </MobileNavLink>
+                  <MobileNavLink to="/wallet" onClick={() => setShowMobileMenu(false)}>
+                    Wallet
+                  </MobileNavLink>
+                  <MobileNavLink to="/messages" onClick={() => setShowMobileMenu(false)}>
+                    Messages
+                  </MobileNavLink>
+
+                  {user.role === 'admin' && (
+                    <>
+                      <MobileMenuDivider />
+                      <MobileNavLink
+                        to={window.location.pathname.startsWith('/admin') ? '/dashboard' : '/admin'}
+                        onClick={() => setShowMobileMenu(false)}
+                      >
+                        {window.location.pathname.startsWith('/admin') ? 'User View' : 'Admin Panel'}
+                      </MobileNavLink>
+                    </>
+                  )}
+
+                  <MobileMenuDivider />
+                  <AuthButton
+                    variant="outline"
+                    onClick={() => {
+                      setShowMobileMenu(false);
+                      handleLogout();
+                    }}
+                    style={{ width: '100%', marginTop: '12px' }}
+                  >
+                    Logout
+                  </AuthButton>
+                </>
+              )}
+
+              {!isAuthenticated && (
+                <>
+                  <MobileMenuDivider />
+                  <AuthButton
+                    variant="outline"
+                    as={Link}
+                    to="/login"
+                    onClick={() => setShowMobileMenu(false)}
+                    style={{ width: '100%', marginBottom: '12px' }}
+                  >
+                    Login
+                  </AuthButton>
+                  <AuthButton
+                    variant="primary"
+                    as={Link}
+                    to="/signup"
+                    onClick={() => setShowMobileMenu(false)}
+                    style={{ width: '100%' }}
+                  >
+                    Sign Up
+                  </AuthButton>
+                </>
+              )}
+            </MobileMenuContent>
+          </MobileMenuDrawer>
+        </>
+      )}
 
       {/* Plan Management Modal */}
       {showPlanModal && user && (
