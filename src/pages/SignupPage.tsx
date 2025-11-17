@@ -427,7 +427,7 @@ const SignupPage: React.FC = () => {
     
     try {
       // Call backend API
-      const response = await fetch('http://localhost:8000/auth/signup', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/signup', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

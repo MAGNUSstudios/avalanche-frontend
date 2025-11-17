@@ -596,7 +596,7 @@ const MarketplacePage: React.FC = () => {
             ) : error ? (
               <ErrorContainer>
                 <p><strong>Error:</strong> {error}</p>
-                <p>Please make sure the backend server is running on http://localhost:8000</p>
+                <p>Please make sure the backend server is running on ${import.meta.env.VITE_API_URL || "http://localhost:8000"}</p>
               </ErrorContainer>
             ) : (
               <>

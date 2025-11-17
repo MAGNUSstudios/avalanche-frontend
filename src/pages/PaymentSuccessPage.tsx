@@ -127,7 +127,7 @@ const PaymentSuccessPage: React.FC = () => {
 
       try {
         const response = await fetch(
-          `http://localhost:8000/stripe/payment-success/${sessionId}?project_id=${projectId}`,
+          `${import.meta.env.VITE_API_URL || "http://localhost:8000"}/stripe/payment-success/${sessionId}?project_id=${projectId}`,
           {
             headers: {
               'Authorization': `Bearer ${localStorage.getItem('avalanche_token')}`,

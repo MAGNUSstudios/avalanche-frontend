@@ -50,7 +50,7 @@ const refreshToken = async (isAdmin: boolean = false) => {
 
     // Call the appropriate refresh endpoint
     const endpoint = isAdmin ? '/auth/admin/refresh' : '/auth/refresh';
-    const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}${endpoint}`, {
+    const response = await fetch(`${import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL || 'http://localhost:8000'}${endpoint}`, {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${localStorage.getItem('avalanche_token')}`,

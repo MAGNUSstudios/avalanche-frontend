@@ -478,7 +478,7 @@ const SettingsPage: React.FC = () => {
       console.log('Sending profile update:', { username, first_name: firstName, last_name: lastName });
 
       const token = localStorage.getItem('avalanche_token');
-      const response = await fetch('http://localhost:8000/users/me', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/users/me', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

@@ -345,7 +345,7 @@ interface Guild {
   created_at: string;
 }
 
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || "http://localhost:8000"}';
 
 const GuildsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -522,7 +522,7 @@ const GuildsPage: React.FC = () => {
         ) : error ? (
           <ErrorContainer>
             <p><strong>Error:</strong> {error}</p>
-            <p>Please make sure the backend server is running on http://localhost:8000</p>
+            <p>Please make sure the backend server is running on ${import.meta.env.VITE_API_URL || "http://localhost:8000"}</p>
           </ErrorContainer>
         ) : currentGuilds.length === 0 ? (
           <EmptyState>
