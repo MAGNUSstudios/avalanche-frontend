@@ -147,7 +147,7 @@ const Input = styled('input', {
   border: '1px solid var(--border-color)',
   borderRadius: '$base',
   fontSize: '$base',
-  color: 'white',
+  color: 'var(--text-primary)',
   transition: 'all 0.2s ease',
 
   '&::placeholder': {
@@ -168,7 +168,7 @@ const Select = styled('select', {
   border: '1px solid var(--border-color)',
   borderRadius: '$base',
   fontSize: '$base',
-  color: 'white',
+  color: 'var(--text-primary)',
   transition: 'all 0.2s ease',
   cursor: 'pointer',
 
@@ -180,7 +180,7 @@ const Select = styled('select', {
 
   option: {
     backgroundColor: 'var(--bg-primary)',
-    color: 'white',
+    color: 'var(--text-primary)',
   },
 });
 

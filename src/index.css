@@ -34,7 +34,8 @@
   --background-light: #f5f7f8;
   --background-dark: #101922;
   --card-background: #ffffff;
-  --input-background: #ffffff;
+  --input-background: #f9fafb;
+  --input-bg: #f9fafb;
 
   /* Semantic colors */
   --success-color: #10b981;
@@ -84,6 +85,7 @@
   --background-dark: #101922;
   --card-background: #1b2127;
   --input-background: rgba(255, 255, 255, 0.05);
+  --input-bg: rgba(255, 255, 255, 0.05);
 
   /* Semantic colors (same as light mode for consistency) */
   --success-color: #10b981;
