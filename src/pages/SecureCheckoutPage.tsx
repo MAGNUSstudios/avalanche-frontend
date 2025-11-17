@@ -324,16 +324,16 @@ const SecureCheckoutPage: React.FC<SecureCheckoutPageProps> = () => {
       }
 
       // Calculate service fee (5%)
-      const serviceFee = parseFloat(itemCost) * 0.05;
+      const calculatedServiceFee = itemCost * 0.05;
 
       // Step 1: Create order first
       const order = await API.orders.create({
-        seller_id: parseInt(sellerId),
-        product_id: productId ? parseInt(productId) : undefined,
+        seller_id: sellerId,
+        product_id: productId,
         item_name: itemName,
-        item_description: itemDescription || '',
-        item_cost: parseFloat(itemCost),
-        service_fee: serviceFee,
+        item_description: '',
+        item_cost: itemCost,
+        service_fee: calculatedServiceFee,
         payment_method: paymentMethod === 'card' ? 'card' : 'bank_transfer',
       });
 

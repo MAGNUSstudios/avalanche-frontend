@@ -353,7 +353,7 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
         seller_id: sellerId,
         product_id: productId || undefined,
         item_name: itemName,
-        item_description: itemDescription || '',
+        item_description: '',
         item_cost: itemCost,
         service_fee: serviceFee,
         payment_method: paymentMethod === 'card' ? 'card' : 'bank_transfer',
