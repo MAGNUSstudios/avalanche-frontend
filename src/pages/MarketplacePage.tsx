@@ -385,7 +385,6 @@ const ErrorContainer = styled('div', {
   textAlign: 'center',
 });
 
-// @ts-expect-error - Stitches nested selector type issue
 const EmptyState = styled('div', {
   textAlign: 'center',
   padding: '$12',
