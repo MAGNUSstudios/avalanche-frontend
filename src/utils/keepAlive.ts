@@ -1,19 +1,19 @@
 /**
  * Keep-alive utility to prevent Render free tier from spinning down
- * Pings the backend every 10 minutes to keep it warm
+ * Pings the backend every 5 minutes to keep it warm
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://avalanche-backend.onrender.com';
-const PING_INTERVAL = 10 * 60 * 1000; // 10 minutes
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://avalanche-backend.onrender.com';
+const PING_INTERVAL = 5 * 60 * 1000; // 5 minutes (reduced to keep backend warmer)
 
 let pingInterval: ReturnType<typeof setInterval> | null = null;
 
 /**
- * Ping the backend health endpoint to keep it alive
+ * Ping the backend root endpoint to keep it alive
  */
 const pingBackend = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/health`, {
+    const response = await fetch(`${API_BASE_URL}/`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -40,9 +40,9 @@ export const startKeepAlive = () => {
   // Ping immediately on start
   pingBackend();
 
-  // Then ping every 10 minutes
+  // Then ping every 5 minutes
   pingInterval = setInterval(pingBackend, PING_INTERVAL);
-  console.log('[KeepAlive] Service started');
+  console.log('[KeepAlive] Service started - pinging every 5 minutes');
 };
 
 /**

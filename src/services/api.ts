@@ -3,6 +3,8 @@
  * Centralized API calls to backend
  */
 
+import { apiCache } from '../utils/apiCache';
+
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 const WALLET_API_BASE_URL = import.meta.env.VITE_WALLET_API_URL || 'http://localhost:8001'; // Assuming new wallet backend runs on port 8001
 
@@ -11,7 +13,7 @@ const getAuthToken = (): string | null => {
   return localStorage.getItem('avalanche_token');
 };
 
-// Helper function to make authenticated requests
+// Helper function to make authenticated requests with caching
 const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const token = getAuthToken();
   const headers: Record<string, string> = {
@@ -30,11 +32,24 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     baseUrl = WALLET_API_BASE_URL;
   }
 
+  const method = (options.method || 'GET').toUpperCase();
+  const cacheKey = `${method}:${baseUrl}${url}`;
+
+  // Check cache for GET requests only
+  if (method === 'GET') {
+    const cached = apiCache.get(cacheKey);
+    if (cached !== null) {
+      console.log(`[Cache Hit] ${cacheKey}`);
+      return cached;
+    }
+  }
+
   try {
-    console.log(`API Request: ${options.method || 'GET'} ${baseUrl}${url}`);
+    console.log(`API Request: ${method} ${baseUrl}${url}`);
 
     const response = await fetch(`${baseUrl}${url}`, {
       ...options,
+      method,
       headers,
     });
 
@@ -55,9 +70,27 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       throw new Error(error.detail || `HTTP error! status: ${response.status}`);
     }
 
-    return response.json();
+    const data = await response.json();
+
+    // Cache successful GET requests (5 minute TTL)
+    if (method === 'GET') {
+      apiCache.set(cacheKey, data, 5 * 60 * 1000);
+    }
+
+    // Invalidate related cache entries for mutations
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+      // Invalidate list endpoints when creating/updating/deleting items
+      if (url.match(/\/products\/\d+/)) apiCache.invalidatePattern(/GET:.*\/products$/);
+      if (url.match(/\/guilds\/\d+/)) apiCache.invalidatePattern(/GET:.*\/guilds$/);
+      if (url.match(/\/projects\/\d+/)) apiCache.invalidatePattern(/GET:.*\/projects$/);
+      if (url.includes('/products')) apiCache.invalidatePattern(/GET:.*\/products/);
+      if (url.includes('/guilds')) apiCache.invalidatePattern(/GET:.*\/guilds/);
+      if (url.includes('/projects')) apiCache.invalidatePattern(/GET:.*\/projects/);
+    }
+
+    return data;
   } catch (error) {
-    console.error(`API Error for ${options.method || 'GET'} ${url}:`, error);
+    console.error(`API Error for ${method} ${url}:`, error);
     throw error;
   }
 };
