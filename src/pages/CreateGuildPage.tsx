@@ -414,7 +414,7 @@ const CreateGuildPage: React.FC = () => {
         formDataToSend.append('banner', formData.banner);
       }
 
-      const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/guilds', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/guilds', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

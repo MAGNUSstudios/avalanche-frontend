@@ -322,7 +322,7 @@ const ProjectPaymentPage: React.FC = () => {
 
     try {
       // Create Stripe Checkout session
-      const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/stripe/create-checkout-session', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/stripe/create-checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

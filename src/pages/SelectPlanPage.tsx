@@ -263,7 +263,7 @@ const SelectPlanPage: React.FC = () => {
           return;
         }
 
-        const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/me', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/auth/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },

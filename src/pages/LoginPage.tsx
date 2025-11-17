@@ -330,9 +330,9 @@ const LoginPage: React.FC = () => {
 
     try {
       // Call backend API
-      console.log('📡 Sending request to: ${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/login');
+      console.log(`📡 Sending request to: ${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/login`);
 
-      const response = await fetch('${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/login', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}/auth/login`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
