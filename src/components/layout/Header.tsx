@@ -393,6 +393,13 @@ const MobileMenuButton = styled('button', {
   },
 });
 
+const DesktopOnlyButton = styled(AuthButton, {
+  display: 'none',
+  '@md': {
+    display: 'inline-flex',
+  },
+});
+
 const MobileMenuOverlay = styled('div', {
   position: 'fixed',
   top: 0,
@@ -630,15 +637,14 @@ const Header: React.FC<HeaderProps> = ({
         </MobileMenuButton>
 
         {showCreateButton && (
-          <AuthButton
+          <DesktopOnlyButton
             variant="primary"
             as={Link}
             to={createButtonHref}
             onClick={handleCreateClick}
-            style={{ display: 'none', '@media (min-width: 768px)': { display: 'inline-flex' } }}
           >
             {createButtonText}
-          </AuthButton>
+          </DesktopOnlyButton>
         )}
 
         {/* Shopping Cart - visible to everyone */}

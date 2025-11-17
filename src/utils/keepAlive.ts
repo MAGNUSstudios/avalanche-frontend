@@ -6,7 +6,7 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://avalanche-backend.onrender.com';
 const PING_INTERVAL = 10 * 60 * 1000; // 10 minutes
 
-let pingInterval: NodeJS.Timeout | null = null;
+let pingInterval: ReturnType<typeof setInterval> | null = null;
 
 /**
  * Ping the backend health endpoint to keep it alive
