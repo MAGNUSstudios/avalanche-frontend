@@ -8,9 +8,12 @@ import {
   TrendingUp,
   Settings,
   LogOut,
+  Moon,
+  Sun,
 } from 'lucide-react';
 import API from '../../services/api';
 import NotificationDropdown from '../NotificationDropdown';
+import { useTheme } from '../../context/ThemeContext';
 
 const PageContainer = styled('div', {
   display: 'flex',
@@ -143,6 +146,25 @@ const UserAvatar = styled('div', {
   },
 });
 
+const ThemeToggleButton = styled('button', {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '36px',
+  height: '36px',
+  borderRadius: '$full',
+  backgroundColor: 'var(--bg-secondary)',
+  border: '1px solid var(--border-color)',
+  color: 'var(--text-primary)',
+  cursor: 'pointer',
+  transition: 'all 0.2s',
+
+  '&:hover': {
+    backgroundColor: 'var(--bg-tertiary)',
+    transform: 'scale(1.05)',
+  },
+});
+
 const LogoutButtonHeader = styled('button', {
   display: 'flex',
   alignItems: 'center',
@@ -178,6 +200,7 @@ interface AdminLayoutProps {
 
 const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, pageTitle }) => {
   const [user, setUser] = useState<{ avatar_url?: string; username?: string; first_name?: string } | null>(null);
+  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const loadUser = async () => {
@@ -244,6 +267,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children, currentPage, pageTi
         <TopBar>
           <PageTitle>{pageTitle}</PageTitle>
           <TopBarActions>
+            <ThemeToggleButton onClick={toggleTheme} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+              {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+            </ThemeToggleButton>
             <NotificationDropdown />
             <UserAvatar>
               {user?.avatar_url ? (
