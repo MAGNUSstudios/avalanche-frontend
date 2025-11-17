@@ -316,7 +316,7 @@ const EmptyState = styled('div', {
     color: 'var(--text-primary)',
   },
   
-  p: {
+  '& p': {
     fontSize: '$base',
   },
 });

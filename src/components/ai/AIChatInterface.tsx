@@ -141,14 +141,14 @@ const AIAvatar = styled('div', {
 });
 
 const HeaderInfo = styled('div', {
-  h3: {
+  '& h3': {
     margin: 0,
     fontSize: '16px',
     fontWeight: '600',
     color: 'var(--text-primary)',
   },
-  
-  p: {
+
+  '& p': {
     margin: 0,
     fontSize: '12px',
     color: 'var(--text-secondary)',
