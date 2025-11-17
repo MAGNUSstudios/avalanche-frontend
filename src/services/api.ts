@@ -506,6 +506,33 @@ export const guildChatsAPI = {
 
 
 
+// ===== ORDERS APIS =====
+export const ordersAPI = {
+  create: async (data: {
+    seller_id: number;
+    product_id?: number;
+    project_id?: number;
+    item_name: string;
+    item_description?: string;
+    item_cost: number;
+    service_fee?: number;
+    payment_method: string;
+  }) => {
+    return fetchWithAuth('/orders', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  getAll: async () => {
+    return fetchWithAuth('/orders');
+  },
+
+  getById: async (id: number) => {
+    return fetchWithAuth(`/orders/${id}`);
+  },
+};
+
 // ===== ESCROW APIS =====
 export const escrowAPI = {
   create: async (data: {
@@ -1033,6 +1060,7 @@ const API = {
   marketplace: marketplaceAPI,
   messages: messagesAPI,
   guildChats: guildChatsAPI,
+  orders: ordersAPI,
   escrow: escrowAPI,
   payments: paymentsAPI,
   ai: aiAPI,

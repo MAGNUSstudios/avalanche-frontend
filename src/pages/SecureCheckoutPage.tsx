@@ -323,16 +323,23 @@ const SecureCheckoutPage: React.FC<SecureCheckoutPageProps> = () => {
         throw new Error('Missing required payment information');
       }
 
-      // Step 1: Create order
-      const order = await API.payments.initialize({
-        order_id: productId || 0, // This will need to be adjusted since we don't have an order yet
+      // Calculate service fee (5%)
+      const serviceFee = parseFloat(itemCost) * 0.05;
+
+      // Step 1: Create order first
+      const order = await API.orders.create({
+        seller_id: parseInt(sellerId),
+        product_id: productId ? parseInt(productId) : undefined,
+        item_name: itemName,
+        item_description: itemDescription || '',
+        item_cost: parseFloat(itemCost),
+        service_fee: serviceFee,
         payment_method: paymentMethod === 'card' ? 'card' : 'bank_transfer',
-        payment_provider: 'stripe',
       });
 
       console.log('Order created:', order);
 
-      // Step 2: Initialize payment with Stripe
+      // Step 2: Initialize payment with Stripe using the actual order ID
       const payment = await API.payments.initialize({
         order_id: order.id,
         payment_method: 'card',

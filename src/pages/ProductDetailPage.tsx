@@ -648,16 +648,20 @@ const ProductDetailPage: React.FC = () => {
         item_cost: product.price,
       });
 
-      // Step 1: Create order directly
-      const order = await API.payments.initialize({
-        order_id: product.id, // This will need to be adjusted since we don't have an order yet
+      // Step 1: Create order first
+      const order = await API.orders.create({
+        seller_id: product.seller_id,
+        product_id: product.id,
+        item_name: product.name,
+        item_description: product.description || '',
+        item_cost: product.price,
+        service_fee: serviceFee,
         payment_method: 'card',
-        payment_provider: 'stripe',
       });
 
       console.log('Order created successfully:', order);
 
-      // Step 2: Initialize Stripe payment and get checkout URL
+      // Step 2: Initialize Stripe payment with the actual order ID
       const payment = await API.payments.initialize({
         order_id: order.id,
         payment_method: 'card',

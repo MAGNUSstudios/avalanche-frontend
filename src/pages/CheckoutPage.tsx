@@ -348,16 +348,20 @@ const CheckoutPage: React.FC<CheckoutPageProps> = ({
     setError(null);
 
     try {
-      // Step 1: Create order
-      const order = await API.payments.initialize({
-        order_id: productId || 0, // This will need to be adjusted since we don't have an order yet
+      // Step 1: Create order first
+      const order = await API.orders.create({
+        seller_id: sellerId,
+        product_id: productId || undefined,
+        item_name: itemName,
+        item_description: itemDescription || '',
+        item_cost: itemCost,
+        service_fee: serviceFee,
         payment_method: paymentMethod === 'card' ? 'card' : 'bank_transfer',
-        payment_provider: 'paystack',
       });
 
       setOrderId(order.id);
 
-      // Step 2: Initialize payment with provider
+      // Step 2: Initialize payment with provider using the actual order ID
       const payment = await API.payments.initialize({
         order_id: order.id,
         payment_method: paymentMethod === 'card' ? 'card' : 'bank_transfer',
