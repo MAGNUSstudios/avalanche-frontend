@@ -469,7 +469,7 @@ const DashboardPage: React.FC = () => {
   const [statsLoading, setStatsLoading] = useState(true);
   const [connectionsLoading, setConnectionsLoading] = useState(true);
   const [walletLoading, setWalletLoading] = useState(true);
-  const API_BASE_URL = import.meta.env.VITE_API_URL || `${import.meta.env.VITE_API_URL || "http://localhost:8000"}`;
+  const API_BASE_URL = import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL || "http://localhost:8000"}';
 
   // Load user from localStorage and check plan selection
   React.useEffect(() => {
