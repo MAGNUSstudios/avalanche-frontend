@@ -474,6 +474,7 @@ interface ActivityData {
   day: string;
   value: number;
   height?: string;
+  percentage?: number;
 }
 
 interface TopicData {
