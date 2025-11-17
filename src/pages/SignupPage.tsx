@@ -573,35 +573,36 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  const handleGitHubSignup = async () => {
-    setOauthLoading('github');
+  // Unused function - keeping for future implementation
+  // const handleGitHubSignup = async () => {
+  //   setOauthLoading('github');
 
-    const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
+  //   const clientId = import.meta.env.VITE_GITHUB_CLIENT_ID;
 
-    // Check if OAuth is configured
-    if (!clientId) {
-      alert('GitHub OAuth is not configured. Please contact support or use email/password signup.');
-      setOauthLoading(null);
-      return;
-    }
+  //   // Check if OAuth is configured
+  //   if (!clientId) {
+  //     alert('GitHub OAuth is not configured. Please contact support or use email/password signup.');
+  //     setOauthLoading(null);
+  //     return;
+  //   }
 
-    try {
-      // GitHub OAuth - redirect to GitHub authorization
-      const redirectUri = encodeURIComponent(window.location.origin + '/signup');
-      const scope = 'read:user user:email';
-      const state = Math.random().toString(36).substring(7);
+  //   try {
+  //     // GitHub OAuth - redirect to GitHub authorization
+  //     const redirectUri = encodeURIComponent(window.location.origin + '/signup');
+  //     const scope = 'read:user user:email';
+  //     const state = Math.random().toString(36).substring(7);
 
-      // Store state for verification
-      sessionStorage.setItem('github_oauth_state', state);
+  //     // Store state for verification
+  //     sessionStorage.setItem('github_oauth_state', state);
 
-      // Redirect to GitHub
-      window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
-    } catch (error) {
-      console.error('GitHub OAuth error:', error);
-      alert('Failed to initialize GitHub signup. Please try again.');
-      setOauthLoading(null);
-    }
-  };
+  //     // Redirect to GitHub
+  //     window.location.href = `https://github.com/login/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&state=${state}`;
+  //   } catch (error) {
+  //     console.error('GitHub OAuth error:', error);
+  //     alert('Failed to initialize GitHub signup. Please try again.');
+  //     setOauthLoading(null);
+  //   }
+  // };
 
   // Handle GitHub OAuth callback
   useEffect(() => {

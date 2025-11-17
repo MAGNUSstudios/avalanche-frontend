@@ -562,7 +562,7 @@ const SettingsPage: React.FC = () => {
     if (!password) return;
 
     try {
-      const result = await API.settings.changeEmail({
+      await API.settings.changeEmail({
         new_email: newEmail,
         password,
       });
@@ -581,108 +581,109 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const handleSaveNotifications = async () => {
-    try {
-      await API.settings.updateNotificationSettings({
-        account_activity: accountActivity,
-        security_alerts: securityAlerts,
-        new_bids: newBids,
-        item_sold: itemSold,
-      });
+  // Unused functions - keeping for future implementation
+  // const handleSaveNotifications = async () => {
+  //   try {
+  //     await API.settings.updateNotificationSettings({
+  //       account_activity: accountActivity,
+  //       security_alerts: securityAlerts,
+  //       new_bids: newBids,
+  //       item_sold: itemSold,
+  //     });
 
-      alert(t('messages.settingsSaved'));
-    } catch (error: any) {
-      console.error('Failed to save notification settings:', error);
-      alert(t('messages.errorOccurred'));
-    }
-  };
+  //     alert(t('messages.settingsSaved'));
+  //   } catch (error: any) {
+  //     console.error('Failed to save notification settings:', error);
+  //     alert(t('messages.errorOccurred'));
+  //   }
+  // };
 
-  const handleSavePrivacy = async () => {
-    try {
-      await API.settings.updatePrivacySettings({
-        share_anonymized_data: shareAnonymizedData,
-        contribute_to_ai: contributeToAI,
-        personalized_recommendations: personalizedRecommendations,
-      });
+  // const handleSavePrivacy = async () => {
+  //   try {
+  //     await API.settings.updatePrivacySettings({
+  //       share_anonymized_data: shareAnonymizedData,
+  //       contribute_to_ai: contributeToAI,
+  //       personalized_recommendations: personalizedRecommendations,
+  //     });
 
-      alert(t('messages.settingsSaved'));
-    } catch (error: any) {
-      console.error('Failed to save privacy settings:', error);
-      alert(t('messages.errorOccurred'));
-    }
-  };
+  //     alert(t('messages.settingsSaved'));
+  //   } catch (error: any) {
+  //     console.error('Failed to save privacy settings:', error);
+  //     alert(t('messages.errorOccurred'));
+  //   }
+  // };
 
-  const handleDownloadData = async () => {
-    try {
-      const result = await API.settings.exportData();
+  // const handleDownloadData = async () => {
+  //   try {
+  //     const result = await API.settings.exportData();
 
-      // Create a downloadable JSON file
-      const dataStr = JSON.stringify(result.data, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `avalanche-data-export-${new Date().toISOString().split('T')[0]}.json`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+  //     // Create a downloadable JSON file
+  //     const dataStr = JSON.stringify(result.data, null, 2);
+  //     const dataBlob = new Blob([dataStr], { type: 'application/json' });
+  //     const url = URL.createObjectURL(dataBlob);
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.download = `avalanche-data-export-${new Date().toISOString().split('T')[0]}.json`;
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //     URL.revokeObjectURL(url);
 
-      alert(t('messages.dataExported'));
-    } catch (error: any) {
-      console.error('Failed to download data:', error);
-      alert(t('messages.errorOccurred'));
-    }
-  };
+  //     alert(t('messages.dataExported'));
+  //   } catch (error: any) {
+  //     console.error('Failed to download data:', error);
+  //     alert(t('messages.errorOccurred'));
+  //   }
+  // };
 
-  const handleDeleteAccount = async () => {
-    const confirmed = confirm(
-      'Are you sure you want to delete your account? This action is permanent and cannot be undone.\n\nType "DELETE" to confirm.'
-    );
+  // const handleDeleteAccount = async () => {
+  //   const confirmed = confirm(
+  //     'Are you sure you want to delete your account? This action is permanent and cannot be undone.\n\nType "DELETE" to confirm.'
+  //   );
 
-    if (!confirmed) return;
+  //   if (!confirmed) return;
 
-    const verification = prompt('Type DELETE to confirm account deletion:');
-    if (verification !== 'DELETE') {
-      alert(t('messages.errorOccurred'));
-      return;
-    }
+  //   const verification = prompt('Type DELETE to confirm account deletion:');
+  //   if (verification !== 'DELETE') {
+  //     alert(t('messages.errorOccurred'));
+  //     return;
+  //   }
 
-    const password = prompt(t('settings.accountSection.passwordRequired'));
-    if (!password) {
-      alert(t('messages.errorOccurred'));
-      return;
-    }
+  //   const password = prompt(t('settings.accountSection.passwordRequired'));
+  //   if (!password) {
+  //     alert(t('messages.errorOccurred'));
+  //     return;
+  //   }
 
-    try {
-      await API.settings.deleteAccount({
-        password,
-        confirmation: 'DELETE',
-      });
+  //   try {
+  //     await API.settings.deleteAccount({
+  //       password,
+  //       confirmation: 'DELETE',
+  //     });
 
-      alert(t('messages.accountDeleted'));
+  //     alert(t('messages.accountDeleted'));
 
-      // Log out and redirect
-      localStorage.removeItem('avalanche_token');
-      localStorage.removeItem('avalanche_user');
-      window.location.href = '/';
-    } catch (error: any) {
-      console.error('Failed to delete account:', error);
-      alert(t('messages.errorOccurred'));
-    }
-  };
+  //     // Log out and redirect
+  //     localStorage.removeItem('avalanche_token');
+  //     localStorage.removeItem('avalanche_user');
+  //     window.location.href = '/';
+  //   } catch (error: any) {
+  //     console.error('Failed to delete account:', error);
+  //     alert(t('messages.errorOccurred'));
+  //   }
+  // };
 
-  const handleClearHistory = async () => {
-    if (confirm(t('settings.privacySection.clearHistoryDesc'))) {
-      try {
-        await API.settings.clearHistory();
-        alert(t('messages.historyCleared'));
-      } catch (error: any) {
-        console.error('Failed to clear history:', error);
-        alert(t('messages.errorOccurred'));
-      }
-    }
-  };
+  // const handleClearHistory = async () => {
+  //   if (confirm(t('settings.privacySection.clearHistoryDesc'))) {
+  //     try {
+  //       await API.settings.clearHistory();
+  //       alert(t('messages.historyCleared'));
+  //     } catch (error: any) {
+  //       console.error('Failed to clear history:', error);
+  //       alert(t('messages.errorOccurred'));
+  //     }
+  //   }
+  // };
 
   const menuItems = [
     { id: 'profile', label: t('settings.profileSection.title'), icon: User },
@@ -701,7 +702,7 @@ const SettingsPage: React.FC = () => {
   return (
     <Layout isAuthenticated={isAuthenticated} showFooter={false}>
       <PageContainer>
-        <Sidebar user={user ? { name: `${user.first_name} ${user.last_name}`, level: 22, avatar: user.avatar_url } : undefined} />
+        <Sidebar user={user ? { name: `${user.first_name} ${user.last_name}`, avatar: user.avatar_url } : undefined} />
         <MainContent>
           <Header>
             <Title>{t('settings.profileSection.title')}</Title>

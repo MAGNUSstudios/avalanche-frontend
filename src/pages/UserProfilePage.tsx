@@ -120,21 +120,22 @@ const FundsAmount = styled('div', {
   color: 'var(--text-primary)',
 });
 
-const AddFundsButton = styled('button', {
-  padding: '$3 $6',
-  borderRadius: '$base',
-  fontSize: '$base',
-  fontWeight: '$semibold',
-  backgroundColor: 'var(--primary-color)',
-  color: 'white',
-  border: 'none',
-  cursor: 'pointer',
-  transition: 'all 0.2s',
+// Unused styled component - keeping for future implementation
+// const AddFundsButton = styled('button', {
+//   padding: '$3 $6',
+//   borderRadius: '$base',
+//   fontSize: '$base',
+//   fontWeight: '$semibold',
+//   backgroundColor: 'var(--primary-color)',
+//   color: 'white',
+//   border: 'none',
+//   cursor: 'pointer',
+//   transition: 'all 0.2s',
 
-  '&:hover': {
-    backgroundColor: 'var(--primary-hover)',
-  },
-});
+//   '&:hover': {
+//     backgroundColor: 'var(--primary-hover)',
+//   },
+// });
 
 const TabsContainer = styled('div', {
   backgroundColor: 'var(--card-bg)',
@@ -180,44 +181,45 @@ const TabContent = styled('div', {
   padding: '$6',
 });
 
-const SubTabs = styled('div', {
-  display: 'flex',
-  gap: '$4',
-  marginBottom: '$6',
-  borderBottom: '1px solid var(--border-color)',
-  paddingBottom: '$4',
-});
+// Unused styled components - keeping for future implementation
+// const SubTabs = styled('div', {
+//   display: 'flex',
+//   gap: '$4',
+//   marginBottom: '$6',
+//   borderBottom: '1px solid var(--border-color)',
+//   paddingBottom: '$4',
+// });
 
-const SubTab = styled('button', {
-  padding: '$2 0',
-  backgroundColor: 'transparent',
-  border: 'none',
-  fontSize: '$sm',
-  fontWeight: '$medium',
-  cursor: 'pointer',
-  transition: 'all 0.2s',
-  position: 'relative',
+// const SubTab = styled('button', {
+//   padding: '$2 0',
+//   backgroundColor: 'transparent',
+//   border: 'none',
+//   fontSize: '$sm',
+//   fontWeight: '$medium',
+//   cursor: 'pointer',
+//   transition: 'all 0.2s',
+//   position: 'relative',
 
-  variants: {
-    active: {
-      true: {
-        color: 'var(--primary-color)',
-        '&::after': {
-          content: '',
-          position: 'absolute',
-          bottom: '-17px',
-          left: 0,
-          right: 0,
-          height: '2px',
-          backgroundColor: 'var(--primary-color)',
-        },
-      },
-      false: {
-        color: 'var(--text-secondary)',
-      },
-    },
-  },
-});
+//   variants: {
+//     active: {
+//       true: {
+//         color: 'var(--primary-color)',
+//         '&::after': {
+//           content: '',
+//           position: 'absolute',
+//           bottom: '-17px',
+//           left: 0,
+//           right: 0,
+//           height: '2px',
+//           backgroundColor: 'var(--primary-color)',
+//         },
+//       },
+//       false: {
+//         color: 'var(--text-secondary)',
+//       },
+//     },
+//   },
+// });
 
 const ItemsGrid = styled('div', {
   display: 'grid',

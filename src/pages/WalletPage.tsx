@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { styled } from '../stitches.config';
 import Layout from '../components/layout/Layout';
 import API from '../services/api';
-import { DollarSign, TrendingUp, TrendingDown, Send, CreditCard } from 'lucide-react';
+import { TrendingUp, TrendingDown, Send } from 'lucide-react';
 import WithdrawalModal from '../components/modals/WithdrawalModal'; // Assuming this modal is adapted for new backend
 
 const PageWrapper = styled('div', {
@@ -127,10 +127,10 @@ const WalletPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isWithdrawalModalOpen, setIsWithdrawalModalOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  // const [user, setUser] = useState<any>(null); // Unused - keeping for future implementation
   const [stripeConnected, setStripeConnected] = useState(false);
   const [stripeAccountStatus, setStripeAccountStatus] = useState<any>(null);
-  const [connectingStripe, setConnectingStripe] = useState(false);
+  // const [connectingStripe, setConnectingStripe] = useState(false); // Unused - keeping for future implementation
 
   const fetchWalletData = async () => {
     try {
@@ -166,10 +166,11 @@ const WalletPage: React.FC = () => {
     }
   };
 
-  const handleConnectBankAccount = () => {
-    // Open the withdrawal modal which now includes bank account setup
-    setIsWithdrawalModalOpen(true);
-  };
+  // Unused function - keeping for future implementation
+  // const handleConnectBankAccount = () => {
+  //   // Open the withdrawal modal which now includes bank account setup
+  //   setIsWithdrawalModalOpen(true);
+  // };
 
   useEffect(() => {
     const token = localStorage.getItem('avalanche_token');
