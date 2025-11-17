@@ -307,7 +307,7 @@ const CreateListingPage: React.FC = () => {
   React.useEffect(() => {
     const checkPaymentInfo = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/seller/payment-info', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}/seller/payment-info`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('avalanche_token')}`
           }
@@ -576,7 +576,7 @@ const CreateListingPage: React.FC = () => {
       // Save payment info first if not already saved
       if (!hasPaymentInfo) {
         try {
-          const paymentResponse = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/seller/payment-info', {
+          const paymentResponse = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}/seller/payment-info`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

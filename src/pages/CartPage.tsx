@@ -296,7 +296,7 @@ const CartPage: React.FC = () => {
       }));
 
       // Call cart checkout endpoint
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/cart/checkout', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}/cart/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

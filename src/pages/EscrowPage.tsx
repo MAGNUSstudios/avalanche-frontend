@@ -484,7 +484,7 @@ const EscrowPage: React.FC = () => {
 
     try {
       // Call the place in escrow API
-      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}`/projects/escrow/place', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || "http://localhost:8000"}/projects/escrow/place`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
